@@ -51,6 +51,8 @@ config_informations ()
   ls -la /root/ > $OUTPUT_FOLDER/root.txt
   sudo -Hiu $uservar env > $OUTPUT_FOLDER/env_$uservar.txt
   env > $OUTPUT_FOLDER/env_root.txt
+  sudo -Hiu $uservar printenv > $OUTPUT_FOLDER/printenv_$uservar.txt
+  printenv > $OUTPUT_FOLDER/printenv_root.txt
 }
 
 system_informations ()
