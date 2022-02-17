@@ -8,7 +8,7 @@ if [ "$EUID" -ne 0 ]; then
 fi
 
 read -p "Username: " uservar
-OUTPUT_FOLDER="/home/$uservar/UPGRADE"
+OUTPUT_FOLDER="/home/$uservar/collect"
 
 folder_check ()
 {
@@ -19,7 +19,7 @@ folder_check ()
 
 gather_informations ()
 {
-  files=(passwd group crontab *-release)
+  files=(passwd group crontab fstab *-release)
   for file in ${files[@]}; do
     cat /etc/$file > $OUTPUT_FOLDER/$file.txt
   done
@@ -73,6 +73,16 @@ log_informations ()
   dmesg > $OUTPUT_FOLDER/dmesg.txt
 }
 
+archive_informations ()
+{
+  chown -R $uservar:$uservar $OUTPUT_FOLDER
+  if ! command -v zip &> /dev/null; then
+    tar -czvf collect.tar.gz $OUTPUT_FOLDER
+  else
+    zip -r collect.zip $OUTPUT_FOLDER
+  fi
+}
+
 
 folder_check
 gather_informations
@@ -81,3 +91,4 @@ process_informations
 config_informations
 system_informations
 log_informations
+archive_informations
